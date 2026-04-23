@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { Task, TaskStatus } from '@/types/task'
 import { CREATE_TASK, UPDATE_TASK } from '@/lib/graphql/mutations'
-import { GET_TASKS } from '@/lib/graphql/queries'
+import { ALL_TASKS_QUERY } from '@/lib/graphql/queries'
+import { STATUS_CONFIG } from '@/lib/statusConfig'
 import { X, Loader2 } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -11,13 +12,10 @@ interface TaskModalProps {
   onClose: () => void
 }
 
-const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'in_progress', label: 'In Progress' },
-  { value: 'completed', label: 'Completed' },
-]
-
-const ALL_TASKS_QUERY = { query: GET_TASKS, variables: { status: null } }
+const STATUS_OPTIONS = (Object.keys(STATUS_CONFIG) as TaskStatus[]).map((value) => ({
+  value,
+  label: STATUS_CONFIG[value].label,
+}))
 
 export function TaskModal({ task, onClose }: TaskModalProps) {
   const isEditing = !!task
@@ -159,11 +157,7 @@ export function TaskModal({ task, onClose }: TaskModalProps) {
                   className={clsx(
                     'flex-1 py-2 px-3 rounded-lg text-xs font-medium border transition-colors',
                     status === opt.value
-                      ? opt.value === 'pending'
-                        ? 'bg-amber-100 border-amber-300 text-amber-800'
-                        : opt.value === 'in_progress'
-                        ? 'bg-blue-100 border-blue-300 text-blue-800'
-                        : 'bg-emerald-100 border-emerald-300 text-emerald-800'
+                      ? STATUS_CONFIG[opt.value].selected
                       : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
                   )}
                 >

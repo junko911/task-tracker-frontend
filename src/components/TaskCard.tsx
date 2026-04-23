@@ -1,9 +1,10 @@
 import { Task } from '@/types/task'
 import { StatusBadge } from './StatusBadge'
-import { Pencil, Trash2, CheckCircle2, Clock, CircleDot } from 'lucide-react'
+import { Pencil, Trash2, CheckCircle2 } from 'lucide-react'
 import { useMutation } from '@apollo/client'
 import { DELETE_TASK, UPDATE_TASK } from '@/lib/graphql/mutations'
-import { GET_TASKS } from '@/lib/graphql/queries'
+import { ALL_TASKS_QUERY } from '@/lib/graphql/queries'
+import { STATUS_CONFIG } from '@/lib/statusConfig'
 import clsx from 'clsx'
 
 interface TaskCardProps {
@@ -11,22 +12,8 @@ interface TaskCardProps {
   onEdit: (task: Task) => void
 }
 
-const STATUS_ICONS = {
-  pending: Clock,
-  in_progress: CircleDot,
-  completed: CheckCircle2,
-}
-
-const STATUS_BORDER: Record<string, string> = {
-  pending: 'border-l-amber-400',
-  in_progress: 'border-l-blue-400',
-  completed: 'border-l-emerald-400',
-}
-
-const ALL_TASKS_QUERY = { query: GET_TASKS, variables: { status: null } }
-
 export function TaskCard({ task, onEdit }: TaskCardProps) {
-  const Icon = STATUS_ICONS[task.status]
+  const { icon: Icon, border } = STATUS_CONFIG[task.status]
 
   const [deleteTask, { loading: deleting }] = useMutation(DELETE_TASK, {
     variables: { id: task.id },
@@ -72,7 +59,7 @@ export function TaskCard({ task, onEdit }: TaskCardProps) {
       className={clsx(
         'bg-white rounded-xl shadow-sm border border-gray-100 border-l-4 p-5 flex flex-col gap-3',
         'hover:shadow-md transition-shadow duration-200',
-        STATUS_BORDER[task.status]
+        border
       )}
     >
       <div className="flex items-start justify-between gap-2">

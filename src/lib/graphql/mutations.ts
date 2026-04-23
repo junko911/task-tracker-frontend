@@ -1,15 +1,12 @@
 import { gql } from '@apollo/client'
+import { TASK_FIELDS } from './queries'
 
 export const CREATE_TASK = gql`
+  ${TASK_FIELDS}
   mutation CreateTask($title: String!, $description: String, $status: TaskStatusEnum) {
     createTask(title: $title, description: $description, status: $status) {
       task {
-        id
-        title
-        description
-        status
-        createdAt
-        updatedAt
+        ...TaskFields
       }
       errors
     }
@@ -17,15 +14,11 @@ export const CREATE_TASK = gql`
 `
 
 export const UPDATE_TASK = gql`
+  ${TASK_FIELDS}
   mutation UpdateTask($id: ID!, $title: String, $description: String, $status: TaskStatusEnum) {
     updateTask(id: $id, title: $title, description: $description, status: $status) {
       task {
-        id
-        title
-        description
-        status
-        createdAt
-        updatedAt
+        ...TaskFields
       }
       errors
     }

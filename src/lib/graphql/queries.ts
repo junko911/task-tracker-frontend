@@ -28,3 +28,5 @@ export const GET_TASK = gql`
     }
   }
 `
+
+export const ALL_TASKS_QUERY = { query: GET_TASKS, variables: { status: null } }

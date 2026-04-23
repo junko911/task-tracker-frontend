@@ -1,14 +1,12 @@
 import { useState, useMemo } from 'react'
 import { useQuery } from '@apollo/client'
 import { GET_TASKS } from '@/lib/graphql/queries'
-import { Task, TaskStatus, TasksData } from '@/types/task'
+import { Filter, Task, TasksData } from '@/types/task'
 import { TaskCard } from './TaskCard'
 import { TaskModal } from './TaskModal'
 import { FilterBar } from './FilterBar'
 import { Plus, ClipboardList, Loader2, RefreshCw, LogOut } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-
-type Filter = TaskStatus | 'all'
 
 export function TaskBoard() {
   const [activeFilter, setActiveFilter] = useState<Filter>('all')
@@ -22,6 +20,13 @@ export function TaskBoard() {
   })
 
   const allTasks = useMemo(() => data?.tasks ?? [], [data])
+
+  const taskCounts = useMemo(() => {
+    const pending = allTasks.filter((t) => t.status === 'pending').length
+    const in_progress = allTasks.filter((t) => t.status === 'in_progress').length
+    const completed = allTasks.filter((t) => t.status === 'completed').length
+    return { all: allTasks.length, pending, in_progress, completed }
+  }, [allTasks])
 
   const filteredTasks = useMemo(() => {
     if (activeFilter === 'all') return allTasks
@@ -82,25 +87,10 @@ export function TaskBoard() {
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {[
-            { label: 'Total', value: allTasks.length, color: 'text-gray-900', bg: 'bg-white' },
-            {
-              label: 'Pending',
-              value: allTasks.filter((t) => t.status === 'pending').length,
-              color: 'text-amber-600',
-              bg: 'bg-amber-50',
-            },
-            {
-              label: 'In Progress',
-              value: allTasks.filter((t) => t.status === 'in_progress').length,
-              color: 'text-blue-600',
-              bg: 'bg-blue-50',
-            },
-            {
-              label: 'Completed',
-              value: allTasks.filter((t) => t.status === 'completed').length,
-              color: 'text-emerald-600',
-              bg: 'bg-emerald-50',
-            },
+            { label: 'Total', value: taskCounts.all, color: 'text-gray-900', bg: 'bg-white' },
+            { label: 'Pending', value: taskCounts.pending, color: 'text-amber-600', bg: 'bg-amber-50' },
+            { label: 'In Progress', value: taskCounts.in_progress, color: 'text-blue-600', bg: 'bg-blue-50' },
+            { label: 'Completed', value: taskCounts.completed, color: 'text-emerald-600', bg: 'bg-emerald-50' },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -115,7 +105,7 @@ export function TaskBoard() {
         </div>
 
         {/* Filters */}
-        <FilterBar activeFilter={activeFilter} onChange={setActiveFilter} tasks={allTasks} />
+        <FilterBar activeFilter={activeFilter} onChange={setActiveFilter} counts={taskCounts} />
 
         {/* Content */}
         {loading && (
