@@ -71,7 +71,7 @@ export function TaskModal({ task, onClose }: TaskModalProps) {
         variables: {
           id: task.id,
           title: title.trim(),
-          description: description.trim(),
+          description: description.trim() || null,
           status,
         },
       })

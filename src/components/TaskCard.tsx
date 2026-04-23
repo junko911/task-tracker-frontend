@@ -30,7 +30,6 @@ export function TaskCard({ task, onEdit }: TaskCardProps) {
 
   const [deleteTask, { loading: deleting }] = useMutation(DELETE_TASK, {
     variables: { id: task.id },
-    refetchQueries: [ALL_TASKS_QUERY],
     update(cache) {
       cache.modify({
         fields: {
