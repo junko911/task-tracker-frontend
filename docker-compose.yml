@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_GRAPHQL_URL: /graphql
+      # Rails API on the host (Docker Desktop). On Linux, add extra_hosts (see README).
+      API_PROXY_TARGET: http://host.docker.internal:3001
+    volumes:
+      - .:/app
+      - /app/node_modules
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
