@@ -5,7 +5,8 @@ import { Task, TaskStatus, TasksData } from '@/types/task'
 import { TaskCard } from './TaskCard'
 import { TaskModal } from './TaskModal'
 import { FilterBar } from './FilterBar'
-import { Plus, ClipboardList, Loader2, RefreshCw } from 'lucide-react'
+import { Plus, ClipboardList, Loader2, RefreshCw, LogOut } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 
 type Filter = TaskStatus | 'all'
 
@@ -13,6 +14,8 @@ export function TaskBoard() {
   const [activeFilter, setActiveFilter] = useState<Filter>('all')
   const [showModal, setShowModal] = useState(false)
   const [editingTask, setEditingTask] = useState<Task | null>(null)
+
+  const { logout } = useAuth()
 
   const { data, loading, error, refetch } = useQuery<TasksData>(GET_TASKS, {
     variables: { status: null },
@@ -50,6 +53,13 @@ export function TaskBoard() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={logout}
+              className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              title="Sign out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
             <button
               onClick={() => refetch()}
               className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"

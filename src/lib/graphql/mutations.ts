@@ -40,3 +40,27 @@ export const DELETE_TASK = gql`
     }
   }
 `
+
+export const SIGN_IN = gql`
+  mutation SignIn($email: String!, $password: String!) {
+    signIn(email: $email, password: $password) {
+      apiToken
+      errors
+      user {
+        email
+      }
+    }
+  }
+`
+
+export const SIGN_UP = gql`
+  mutation SignUp($email: String!, $password: String!) {
+    signUp(email: $email, password: $password) {
+      apiToken
+      errors
+      user {
+        email
+      }
+    }
+  }
+`
