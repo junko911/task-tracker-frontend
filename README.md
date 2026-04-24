@@ -2,6 +2,8 @@
 
 React **SPA** (Vite + TypeScript + Tailwind) that talks to the **Task Tracker API** over GraphQL via Apollo Client.
 
+**Live demo:** https://task-tracker-web-eight.vercel.app/
+
 ## Stack
 
 | Layer   | Technology        |
