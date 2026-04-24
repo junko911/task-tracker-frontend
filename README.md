@@ -15,7 +15,7 @@ React **SPA** (Vite + TypeScript + Tailwind) that talks to the **Task Tracker AP
 
 ## Prerequisites
 
-The GraphQL API must be running (see **`../backend/`** in this workspace), typically at **http://localhost:3001/graphql**.
+The GraphQL API must be running (see **[task-tracker-backend](https://github.com/junko911/task-tracker-backend)**), typically at **http://localhost:3001/graphql**.
 
 ## Local development
 
