@@ -6,12 +6,13 @@ React **SPA** (Vite + TypeScript + Tailwind) that talks to the **Task Tracker AP
 
 ## Stack
 
-| Layer   | Technology        |
-|---------|-------------------|
-| UI      | React 18          |
-| Build   | Vite 5            |
-| Styling | Tailwind CSS      |
-| Data    | Apollo Client     |
+| Layer    | Technology        |
+|----------|-------------------|
+| UI       | React 18          |
+| Language | TypeScript        |
+| Build    | Vite 5            |
+| Styling  | Tailwind CSS      |
+| Data     | Apollo Client     |
 
 ## Prerequisites
 
@@ -62,3 +63,8 @@ Set **`VITE_GRAPHQL_URL`** at build time to your deployed API URL. The productio
 - Create, view, update, and delete tasks
 - Filter by status (client-side list filter)
 - Quick status advance on cards
+- Authentication — sign up / sign in with email and password; tasks are scoped to the logged-in user
+
+## CI/CD
+
+GitHub Actions runs ESLint, TypeScript type-check, and a production build on every push and pull request to `main`. Deployments to Vercel are triggered automatically on merge to `main`.
