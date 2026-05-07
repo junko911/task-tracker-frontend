@@ -63,6 +63,19 @@ export function LoginPage() {
     setFormErrors([])
   }
 
+  const handleTryDemo = async () => {
+    setFormErrors([])
+    try {
+      const { data } = await signIn({ variables: { email: 'demo@example.com', password: 'password12' } })
+      const payload = data?.signIn
+      if (!payload) return
+      if (payload.errors.length > 0) { setFormErrors(payload.errors); return }
+      if (payload.apiToken && payload.user) login(payload.apiToken, payload.user)
+    } catch {
+      setFormErrors(['Something went wrong. Please try again.'])
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-slate-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
@@ -77,6 +90,20 @@ export function LoginPage() {
           <h2 className="text-lg font-semibold text-gray-900 mb-6">
             {mode === 'signin' ? 'Sign in' : 'Create account'}
           </h2>
+
+          <button
+            type="button"
+            onClick={handleTryDemo}
+            disabled={loading}
+            className="w-full mb-5 py-2.5 px-4 rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50 text-indigo-700 font-medium text-sm hover:bg-indigo-100 hover:border-indigo-400 transition-colors disabled:opacity-50"
+          >
+            {loading ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Signing in…</span> : '✦ Try Demo — no sign up needed'}
+          </button>
+
+          <div className="relative mb-1">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
+            <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400">or sign in with your account</span></div>
+          </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
